@@ -1,6 +1,6 @@
-import { Operation } from "./operation"
+import { OperatorFunc, PredicateFunc } from "./operation"
 
-export const filter = (predicate: any) => (op: Operation): Operation => {
+export const filter = <T>(predicate: PredicateFunc<T>): OperatorFunc<T, T> => op => {
   if (predicate(op.value) === false) {
     op.skip = true
   }

@@ -3,7 +3,7 @@
     "lib": ["DOM", "ES2015"],
     "outDir": "./",
     "target": "ES6",
-    "module": "commonjs",
+    "module": "ESNext",
     "moduleResolution": "Node",
     "declarationDir": ".",
     "declaration": true

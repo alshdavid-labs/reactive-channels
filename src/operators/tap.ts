@@ -1,6 +1,6 @@
-import { Operation } from "./operation"
+import { OperatorFunc, CallbackFunc } from "./operation"
 
-export const tap = (cb: any) => (op: Operation): Operation => {
+export const tap = <T>(cb: CallbackFunc<T>): OperatorFunc<T, T> => op => {
   cb(op.value)
   return op
 }

@@ -9,7 +9,7 @@ export class Channel<T = any> {
     return this.onComplete.getPromise()
   }
 
-  emit(value: T) {
+  emit(value: T): void {
     if (this.onComplete.isComplete()) {
       throw new Error('Cannot next on complete subject')
     }
@@ -18,7 +18,7 @@ export class Channel<T = any> {
     this.subject = new PromiseSubject()
   }
 
-  complete() {
+  complete(): void {
     this.onComplete.resolve(this.lastValue)
   }
 

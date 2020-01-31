@@ -6,9 +6,17 @@ void async function(){
   const a$ = new Channel<number>()
 
   const b$ = pipe(a$)(
-    map(v => v + 1),
-    filter(v => v === 4),
-    first()
+    map(v => v.toString()),
+    map(v => parseInt(v)),
+    map(v => v.toString()),
+    map(v => parseInt(v)),
+    map(v => v.toString()),
+    map(v => parseInt(v)),
+    map(v => v.toString()),
+    map(v => parseInt(v)),
+    map(v => v.toString()),
+    // map(v => parseInt(v)),
+    // map(v => v.toString()),
   )
   
   void async function(){

@@ -14,7 +14,7 @@ export class PrivateChannel<T = any> {
     ) => () => void
   ) {}
 
-  private setup() {
+  private setup(): void {
     this.listeners++
 
     if (this.listeners > 1) {
@@ -42,7 +42,7 @@ export class PrivateChannel<T = any> {
     return result
   }
 
-  private emit(value: T) {
+  private emit(value: T): void {
     if (this.onComplete.isComplete()) {
       throw new Error('Cannot next on complete subject')
     }
@@ -51,7 +51,7 @@ export class PrivateChannel<T = any> {
     this.onValue = new PromiseSubject<T>()
   }
 
-  private complete() {
+  private complete(): void {
     this.onComplete.resolve(this.lastValue)
   }
 

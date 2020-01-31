@@ -1,6 +1,6 @@
-import { Operation } from "./operation"
+import { PredicateFunc, OperatorFunc } from "./operation"
 
-export const first = (predicate?: any) => (op: Operation): Operation => {
+export const first = <T>(predicate?: PredicateFunc<T>): OperatorFunc<T, T> => op => {
   if (!predicate) {
     op.complete = true
   } else if (predicate(op.value) === false) {

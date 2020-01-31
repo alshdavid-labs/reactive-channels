@@ -24,6 +24,7 @@ import { Channel } from 'reactive-channels'
 const numbers = new Channel<number>()
 
 void async function(){
+  // For loop will pause waiting for the next emit()
   for (const number of numbers) {
     console.log(await number)
   }
@@ -52,7 +53,6 @@ Easily convert to a promise
 
 ```javascript
 import { Channel } from 'reactive-channels'
-import { sleep } from "./lib/sleep"
 
 const chan = new Channel<string>()
 
@@ -73,7 +73,6 @@ Includes a few operators to implement reactive style functional programming
 ```javascript
 import { Channel } from 'reactive-channels'
 import { pipe, first, filter, map, tap } from "reactive-channels/operators"
-import { sleep } from "./lib/sleep"
 
 const a$ = new Channel<number>()
 
@@ -90,12 +89,7 @@ void async function(){
   }
 }()
 
-await sleep(100)
 a$.emit(1)
-
-await sleep(100)
 a$.emit(2)
-
-await sleep(100)
 a$.emit(3)
 ```
