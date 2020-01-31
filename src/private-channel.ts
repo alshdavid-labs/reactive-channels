@@ -2,8 +2,9 @@ import { PromiseSubject } from "./promise-subject"
 
 export class PrivateChannel<T = any> {
   private subject = new PromiseSubject<T>()
-  private hasComplete = false
+  private onComplete = new PromiseSubject<T>()
   private listeners = 0
+  private lastValue: T
   private teardown: any | undefined
 
   constructor(
@@ -14,43 +15,56 @@ export class PrivateChannel<T = any> {
   ) {}
 
   private setup() {
-    this.teardown = this.fn(
+    if (this.listeners > 0) {
+      return
+    }
+    this.listeners++
+    const teardown = this.fn(
       this.emit.bind(this),
       this.complete.bind(this),
     )
+    this.teardown = () => {
+      this.listeners--
+      if (this.listeners > 0) {
+        return
+      }
+      teardown()
+    }
+  }
+
+  public async toPromise() {
+    this.setup()
+    const result = await this.onComplete
+    this.teardown()
+    return result
   }
 
   private emit(value: T) {
-    if (this.hasComplete) {
+    if (this.onComplete.isComplete()) {
       throw new Error('Cannot next on complete subject')
     }
-    this.subject.complete(value)
+    this.lastValue = value
+    this.subject.resolve(value)
     this.subject = new PromiseSubject<T>()
   }
 
   private complete() {
-    this.hasComplete = true
+    this.onComplete.resolve(this.lastValue)
   }
 
   *[Symbol.iterator](): Iterator<Promise<T>> {
-    if (this.listeners === 0) {
-      this.setup()
-    }
-    this.listeners++
+    this.setup()
     let resolved = false
-    while (this.hasComplete === false) {
+    while (this.onComplete.isComplete() === false) {
       try {
-        yield this.subject.onDone
+        yield this.subject
         resolved = true
       } finally {
         if (resolved === true) {
           resolved = false
           continue
         }
-        this.listeners--
-        if (this.listeners === 0) {
-          this.teardown()
-        }
+        this.teardown()
       }
     }
   }

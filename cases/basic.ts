@@ -1,4 +1,4 @@
-import { Channel, PrivateChannel } from "../channel"
+import { Channel } from "../src"
 import { sleep } from "./lib/sleep"
 
 void async function(){

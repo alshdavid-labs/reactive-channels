@@ -1,3 +1,5 @@
+import { PrivateChannel } from "../src"
+
 void async function(){
   const chann = new PrivateChannel<number>(emit => {
     let i = -1
