@@ -1,29 +1,22 @@
-export class PromiseSubject<T = any> extends Promise<T> {
-  private resolved: boolean
+export class PromiseSubject<T = any> {
   public resolve: (value?: T) => void
   public reject: (value?: T) => void
 
-  constructor() {
-    let resolve
-    let reject
-
-    super((res, rej) => {
-      resolve = res
-      reject = rej
-    })
-
+  private resolved = false
+  private promise = new Promise<T>((res, rej) => {
     this.resolve = (v) => {
       this.resolved = true
-      resolve(v)
+      res(v)
     }
-    
+
     this.reject = (v) => {
       this.resolved = true
-      reject(v)
+      rej(v)
     }
-    this.resolved = false
+  })
 
-    PromiseSubject.prototype.constructor = Promise
+  public getPromise() {
+    return this.promise
   }
 
   public isComplete() {

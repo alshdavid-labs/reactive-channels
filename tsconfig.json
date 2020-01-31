@@ -2,7 +2,8 @@
   "compilerOptions": {
     "lib": ["DOM", "ES2015"],
     "outDir": "./",
-    "module": "ESNext",
+    "target": "ES6",
+    "module": "commonjs",
     "moduleResolution": "Node",
     "declarationDir": ".",
     "declaration": true

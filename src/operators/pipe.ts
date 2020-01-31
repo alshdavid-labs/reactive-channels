@@ -1,8 +1,11 @@
-import { Channel } from "../channel";
 import { PrivateChannel } from "../private-channel";
 import { runOperations } from "./run-operations";
 
-export const pipe = (target: Channel) => (...ops: any[]): PrivateChannel<any> => {
+export const pipe = <T>(
+  target: Iterable<Promise<T>>
+) => (
+  ...ops: any[]
+): PrivateChannel<any> => {
   return new PrivateChannel<any>((emit, complete) => {
     let done: any = false
 

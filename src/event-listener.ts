@@ -5,7 +5,7 @@ export interface EventAdderRemover<T = any> {
   removeEventListener(event: string, cb: (event: T) => void): void
 }
 
-export const fromEvent = (
+export const eventListener = (
   target: EventAdderRemover, 
   event: string
 ) => new PrivateChannel(emit => {

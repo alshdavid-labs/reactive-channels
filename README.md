@@ -1,32 +1,13 @@
 # Reactive Channels
 
-Use `async` and `await` to handle streams!
+Use `async` and `await` to handle streams!<br/>
+This is inspired by the Go implementation of channels and rxjs
 
-```javascript
-import { Channel } from 'reactive-channels'
-import { sleep } from "./lib/sleep"
+[Playground (codesandbox.io)](https://codesandbox.io/s/suspicious-bhaskara-h706w)
 
-const chan = new Channel<number>()
+## Installation
 
-void async function(){
-  for (const value of chan) {
-    console.log(await value)
-  }
-}()
-
-await sleep(100)
-chan.emit(1)
-
-await sleep(100)
-chan.emit(2)
-
-await sleep(100)
-chan.emit(3)
-```
-
-### Installation
-
-Easy as pie 3.14
+800 <b>bytes</b> gziped
 
 ```bash
 npm install --save reactive-channels
@@ -35,24 +16,59 @@ npm install --save reactive-channels
 # yarn add reactive-channels
 ```
 
+## Basic Channel
+
+```javascript
+import { Channel } from 'reactive-channels'
+
+const numbers = new Channel<number>()
+
+void async function(){
+  for (const number of numbers) {
+    console.log(await number)
+  }
+}()
+
+numbers.emit(1)
+numbers.emit(2)
+numbers.emit(3)
+```
+
+## Wrap DOM Events
+
+```javascript
+import { eventListener } from 'reactive-channels'
+
+const onscroll = eventListener(window, 'scroll')
+
+for (const event of onscroll) {
+  console.log(await event)
+}
+```
+
+## Convert to Promise
+
 Easily convert to a promise
 
 ```javascript
 import { Channel } from 'reactive-channels'
 import { sleep } from "./lib/sleep"
 
-const chan = new Channel<number>()
+const chan = new Channel<string>()
 
 void async function(){
   const value = await chan.toPromise()
   console.log(value)
 }()
 
-chan.emit(1)
+chan.emit('foobar')
 chan.complete()
 ```
 
+## Operators
+
 Includes a few operators to implement reactive style functional programming
+<br/>Feel free to make pull requests to add more
 
 ```javascript
 import { Channel } from 'reactive-channels'

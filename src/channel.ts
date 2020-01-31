@@ -5,8 +5,8 @@ export class Channel<T = any> {
   private onComplete = new PromiseSubject<T>()
   private lastValue: T
 
-  toPromise() {
-    return this.onComplete
+  toPromise(): Promise<T> {
+    return this.onComplete.getPromise()
   }
 
   emit(value: T) {
@@ -24,7 +24,7 @@ export class Channel<T = any> {
 
   *[Symbol.iterator](): Iterator<Promise<T>> {
     while (this.onComplete.isComplete() === false) {
-      yield this.subject
+      yield this.subject.getPromise()
     }
   }
 }

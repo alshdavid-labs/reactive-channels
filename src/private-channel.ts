@@ -1,7 +1,7 @@
 import { PromiseSubject } from "./promise-subject"
 
 export class PrivateChannel<T = any> {
-  private subject = new PromiseSubject<T>()
+  private onValue = new PromiseSubject<T>()
   private onComplete = new PromiseSubject<T>()
   private listeners = 0
   private lastValue: T
@@ -15,14 +15,17 @@ export class PrivateChannel<T = any> {
   ) {}
 
   private setup() {
-    if (this.listeners > 0) {
+    this.listeners++
+
+    if (this.listeners > 1) {
       return
     }
-    this.listeners++
+    
     const teardown = this.fn(
       this.emit.bind(this),
       this.complete.bind(this),
     )
+
     this.teardown = () => {
       this.listeners--
       if (this.listeners > 0) {
@@ -32,9 +35,9 @@ export class PrivateChannel<T = any> {
     }
   }
 
-  public async toPromise() {
+  public async toPromise(): Promise<T> {
     this.setup()
-    const result = await this.onComplete
+    const result = await this.onComplete.getPromise()
     this.teardown()
     return result
   }
@@ -44,8 +47,8 @@ export class PrivateChannel<T = any> {
       throw new Error('Cannot next on complete subject')
     }
     this.lastValue = value
-    this.subject.resolve(value)
-    this.subject = new PromiseSubject<T>()
+    this.onValue.resolve(value)
+    this.onValue = new PromiseSubject<T>()
   }
 
   private complete() {
@@ -57,7 +60,7 @@ export class PrivateChannel<T = any> {
     let resolved = false
     while (this.onComplete.isComplete() === false) {
       try {
-        yield this.subject
+        yield this.onValue.getPromise()
         resolved = true
       } finally {
         if (resolved === true) {
