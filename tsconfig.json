@@ -1,17 +1,20 @@
 {
   "compilerOptions": {
-    "lib": ["DOM", "ES2015"],
+    "lib": ["DOM", "ES2015", "esnext"],
     "outDir": "./",
-    "target": "ES6",
-    "module": "ESNext",
+    "target": "esnext",
+    "module": "commonjs",
     "moduleResolution": "Node",
     "declarationDir": ".",
-    "declaration": true
+    "declaration": true,
+    "inlineSourceMap": true,
+    "inlineSources": true
   },
   "include": [
     "src"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "old"
   ]
 }

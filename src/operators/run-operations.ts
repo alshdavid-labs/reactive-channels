@@ -17,7 +17,7 @@ export type OperationRunner = {
 
 export const runOperations: OperationRunner = (value: any, ...ops: any[]) => {
   let state: Operation<any> = new Operation(value)
-
+  
   for (const op of ops) {
     state = op(state)
     if (state.skip === true) {

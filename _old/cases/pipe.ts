@@ -2,8 +2,11 @@ import { Channel } from "../src"
 import { pipe, first, filter, map } from "../src/operators"
 import { sleep } from "./lib/sleep"
 
+console.log('ok')
+
 void async function(){
   const a$ = new Channel<number>()
+  a$.subscribe(console.log)
 
   const b$ = pipe(a$)(
     map(v => v.toString()),
@@ -19,11 +22,7 @@ void async function(){
     // map(v => v.toString()),
   )
   
-  void async function(){
-    for (const value of b$) {
-      console.log(await value)
-    }
-  }()
+  b$.subscribe(console.log)
   
   await sleep(100)
   a$.emit(1)

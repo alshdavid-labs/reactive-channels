@@ -1,0 +1,6 @@
+{
+  "watch": ["src", "cases"],
+  "ext": "ts",
+  "ignore": ["src/**/*.spec.ts"],
+  "exec": "clear && ts-node ./cases/basic.ts"
+}
